@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { DeleteButton } from 'components/ContactForm/ContactForm.styled';
 import {
   ContactsItem,
@@ -5,17 +6,28 @@ import {
   Text,
 } from './ContactsList.styled';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getContacts,
   getFilter,
   getVisibleContacts,
 } from '../../redux/selectors';
+import { deleteContact } from '../../redux/contactsSlice';
 
-export default function ContactsList({ onDelete }) {
+export default function ContactsList() {
+  const dispatch = useDispatch();
+
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
   const visibleContacts = getVisibleContacts(contacts, filter.filter);
+
+  const onDelete = contactId => {
+    toast.success('Contact is deleted', {
+      fontSize: '16px',
+      width: '350px',
+    });
+    dispatch(deleteContact(contactId));
+  };
 
   return (
     <ContactsListContainer>
