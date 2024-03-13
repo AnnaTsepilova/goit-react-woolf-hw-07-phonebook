@@ -10,15 +10,15 @@ import {
 } from './ContactForm.styled';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from '../../redux/selectors';
-import { addContact } from '../../redux/contactsSlice';
+import { selectContacts } from '../../redux/selectors';
+import { addContact } from '../../redux/operations';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const items = useSelector(selectContacts);
 
   const nameInputId = nanoid();
   const telInputId = nanoid();
@@ -42,11 +42,11 @@ const ContactForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    let isContactName = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(name.toLowerCase())
+    let isContactName = items.filter(item =>
+      item.name.toLowerCase().includes(name.toLowerCase())
     );
-    let isContactNumber = contacts.filter(contact =>
-      contact.number.toLowerCase().includes(number.toLowerCase())
+    let isContactNumber = items.filter(item =>
+      item.phone.toLowerCase().includes(number.toLowerCase())
     );
 
     if (isContactName.length) {
@@ -68,6 +68,10 @@ const ContactForm = () => {
     }
 
     dispatch(addContact({ id: nanoid(), name, number }));
+    toast.success('Contact was added', {
+      fontSize: '16px',
+      width: '350px',
+    });
     reset();
   };
 
@@ -93,7 +97,7 @@ const ContactForm = () => {
       <ContactInput
         type="tel"
         name="number"
-        pattern="^\+?3?8?(0\d{9})$"
+        pattern="(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
         value={number}

@@ -8,18 +8,18 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getContacts,
-  getFilter,
-  getVisibleContacts,
+  selectFilter,
+  selectVisibleContacts,
+  selectContacts,
 } from '../../redux/selectors';
-import { deleteContact } from '../../redux/contactsSlice';
+import { deleteContact } from '../../redux/operations';
 
 export default function ContactsList() {
   const dispatch = useDispatch();
 
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-  const visibleContacts = getVisibleContacts(contacts, filter.filter);
+  const items = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
+  const visibleContacts = selectVisibleContacts(items, filter.filter);
 
   const onDelete = contactId => {
     toast.success('Contact is deleted', {
@@ -36,7 +36,7 @@ export default function ContactsList() {
           return (
             <ContactsItem key={contact.id}>
               <Text>
-                {contact.name}: {contact.number}
+                {contact.name}: {contact.phone}
               </Text>
               <DeleteButton
                 type="button"

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const SectionWrapper = styled.div`
-  padding: 24px 20px;
+  padding: 24px 0 0 20px;
   border-top: 7px solid rgba(238, 191, 49, 0.733);
 `;
 
